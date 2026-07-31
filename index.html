@@ -272,7 +272,6 @@
     z-index: 1;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
   }
 
   /* CSS-only fallback toggle for My Moodies, independent of JavaScript */
@@ -441,12 +440,12 @@
     display: flex;
     gap: 4px;
     padding: 4px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.24), rgba(255,255,255,0.08));
-    -webkit-backdrop-filter: blur(6px) saturate(160%);
-    backdrop-filter: blur(6px) saturate(160%);
+    background: linear-gradient(135deg, rgba(255,255,255,0.32), rgba(255,255,255,0.14));
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: blur(14px) saturate(180%);
     border-radius: 9999px;
-    border: 1px solid rgba(255,255,255,0.35);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
+    border: 1px solid rgba(255,255,255,0.45);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.5);
   }
   .nav-pills::before {
     content: "";
@@ -456,7 +455,23 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.16);
     z-index: -1;
   }
+  .nav-pills .toggle-pill {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 0;
+    border-radius: 32px;
+    background: linear-gradient(135deg, rgba(69,53,171,0.95), rgba(69,53,171,0.8));
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    backdrop-filter: blur(10px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: 0 2px 8px rgba(86,66,214,0.25), inset 0 1px 0 rgba(255,255,255,0.5);
+    transition: transform 0.32s cubic-bezier(0.65, 0, 0.35, 1), width 0.32s cubic-bezier(0.65, 0, 0.35, 1);
+    z-index: 0;
+  }
   .nav-btn {
+    position: relative;
+    z-index: 1;
     flex: 1 1 0;
     display: flex;
     align-items: center;
@@ -467,12 +482,30 @@
     background: transparent;
     color: var(--purple);
     cursor: pointer;
+    transition: color 0.2s;
   }
   .nav-btn.is-active {
-    background: var(--purple);
     color: var(--white);
   }
   .nav-btn svg { display: block; }
+
+  .wip-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-app);
+    z-index: 10;
+  }
+  .wip-overlay.is-active { display: flex; }
+  .wip-overlay p {
+    margin: 0;
+    font-family: var(--font-head);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
 
   /* ---------- Day detail sheet (tap a moodie thumbnail) ---------- */
   .day-detail-backdrop {
@@ -1774,6 +1807,7 @@
 
     <div class="nav-wrap">
       <div class="nav-pills">
+        <div class="toggle-pill" aria-hidden="true"></div>
         <button class="nav-btn is-active" type="button" aria-label="Home">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5.63567 5.6361C6.53111 4.74051 7.60548 4.04398 8.78855 3.59205C9.97162 3.14012 11.2367 2.94296 12.5012 3.01347C13.7657 3.08398 15.0011 3.42056 16.1266 4.00121C17.2521 4.58186 18.2424 5.39351 19.0327 6.3831L13.4137 12.0001L19.0327 17.6171C18.2684 18.5725 17.3173 19.362 16.2375 19.9374C15.1578 20.5128 13.972 20.862 12.7528 20.9637C11.5335 21.0654 10.3063 20.9174 9.14619 20.5287C7.98605 20.1401 6.91734 19.519 6.00534 18.7034C5.09334 17.8878 4.35722 16.8948 3.84195 15.7851C3.32668 14.6754 3.04308 13.4723 3.00848 12.2493C2.97388 11.0263 3.18901 9.80909 3.64072 8.67203C4.09244 7.53497 4.77124 6.50196 5.63567 5.6361V5.6361Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.5 8.5C12.0523 8.5 12.5 8.05228 12.5 7.5C12.5 6.94772 12.0523 6.5 11.5 6.5C10.9477 6.5 10.5 6.94772 10.5 7.5C10.5 8.05228 10.9477 8.5 11.5 8.5Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
@@ -2040,6 +2074,7 @@
 
     <div class="nav-wrap">
       <div class="nav-pills">
+        <div class="toggle-pill" aria-hidden="true"></div>
         <button class="nav-btn is-active" type="button" aria-label="Home">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5.63567 5.6361C6.53111 4.74051 7.60548 4.04398 8.78855 3.59205C9.97162 3.14012 11.2367 2.94296 12.5012 3.01347C13.7657 3.08398 15.0011 3.42056 16.1266 4.00121C17.2521 4.58186 18.2424 5.39351 19.0327 6.3831L13.4137 12.0001L19.0327 17.6171C18.2684 18.5725 17.3173 19.362 16.2375 19.9374C15.1578 20.5128 13.972 20.862 12.7528 20.9637C11.5335 21.0654 10.3063 20.9174 9.14619 20.5287C7.98605 20.1401 6.91734 19.519 6.00534 18.7034C5.09334 17.8878 4.35722 16.8948 3.84195 15.7851C3.32668 14.6754 3.04308 13.4723 3.00848 12.2493C2.97388 11.0263 3.18901 9.80909 3.64072 8.67203C4.09244 7.53497 4.77124 6.50196 5.63567 5.6361V5.6361Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.5 8.5C12.0523 8.5 12.5 8.05228 12.5 7.5C12.5 6.94772 12.0523 6.5 11.5 6.5C10.9477 6.5 10.5 6.94772 10.5 7.5C10.5 8.05228 10.9477 8.5 11.5 8.5Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
@@ -2394,6 +2429,7 @@
 
     <div class="nav-wrap">
       <div class="nav-pills">
+        <div class="toggle-pill" aria-hidden="true"></div>
         <button class="nav-btn is-active" type="button" aria-label="Home">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5.63567 5.6361C6.53111 4.74051 7.60548 4.04398 8.78855 3.59205C9.97162 3.14012 11.2367 2.94296 12.5012 3.01347C13.7657 3.08398 15.0011 3.42056 16.1266 4.00121C17.2521 4.58186 18.2424 5.39351 19.0327 6.3831L13.4137 12.0001L19.0327 17.6171C18.2684 18.5725 17.3173 19.362 16.2375 19.9374C15.1578 20.5128 13.972 20.862 12.7528 20.9637C11.5335 21.0654 10.3063 20.9174 9.14619 20.5287C7.98605 20.1401 6.91734 19.519 6.00534 18.7034C5.09334 17.8878 4.35722 16.8948 3.84195 15.7851C3.32668 14.6754 3.04308 13.4723 3.00848 12.2493C2.97388 11.0263 3.18901 9.80909 3.64072 8.67203C4.09244 7.53497 4.77124 6.50196 5.63567 5.6361V5.6361Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.5 8.5C12.0523 8.5 12.5 8.05228 12.5 7.5C12.5 6.94772 12.0523 6.5 11.5 6.5C10.9477 6.5 10.5 6.94772 10.5 7.5C10.5 8.05228 10.9477 8.5 11.5 8.5Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
@@ -2492,6 +2528,7 @@
 
     <div class="nav-wrap">
       <div class="nav-pills">
+        <div class="toggle-pill" aria-hidden="true"></div>
         <label class="nav-btn js-close-moodies" for="insightsToggle" aria-label="Home">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5.63567 5.6361C6.53111 4.74051 7.60548 4.04398 8.78855 3.59205C9.97162 3.14012 11.2367 2.94296 12.5012 3.01347C13.7657 3.08398 15.0011 3.42056 16.1266 4.00121C17.2521 4.58186 18.2424 5.39351 19.0327 6.3831L13.4137 12.0001L19.0327 17.6171C18.2684 18.5725 17.3173 19.362 16.2375 19.9374C15.1578 20.5128 13.972 20.862 12.7528 20.9637C11.5335 21.0654 10.3063 20.9174 9.14619 20.5287C7.98605 20.1401 6.91734 19.519 6.00534 18.7034C5.09334 17.8878 4.35722 16.8948 3.84195 15.7851C3.32668 14.6754 3.04308 13.4723 3.00848 12.2493C2.97388 11.0263 3.18901 9.80909 3.64072 8.67203C4.09244 7.53497 4.77124 6.50196 5.63567 5.6361V5.6361Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.5 8.5C12.0523 8.5 12.5 8.05228 12.5 7.5C12.5 6.94772 12.0523 6.5 11.5 6.5C10.9477 6.5 10.5 6.94772 10.5 7.5C10.5 8.05228 10.9477 8.5 11.5 8.5Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </label>
@@ -2608,16 +2645,24 @@
 
   <script>
     var device = document.getElementById('device');
+    function syncMoodiesVisibility(open) {
+      var s15 = document.getElementById('screen15');
+      s15.style.setProperty('opacity', open ? '1' : '0', 'important');
+      s15.style.setProperty('pointer-events', open ? 'auto' : 'none', 'important');
+      s15.style.setProperty('z-index', open ? '8' : '1', 'important');
+    }
     document.querySelectorAll('.js-open-moodies').forEach(function (el) {
       el.addEventListener('click', function (e) {
         e.preventDefault();
         document.getElementById('insightsToggle').checked = true;
+        syncMoodiesVisibility(true);
       });
     });
     document.querySelectorAll('.js-close-moodies').forEach(function (el) {
       el.addEventListener('click', function (e) {
         e.preventDefault();
         document.getElementById('insightsToggle').checked = false;
+        syncMoodiesVisibility(false);
       });
     });
     var hasRecord = localStorage.getItem('fuuHasRecord') === '1';
@@ -2737,6 +2782,53 @@
     }
     document.getElementById('modeToggleDoodle').addEventListener('click', function () { setDrawMode('doodle'); });
     document.getElementById('modeToggleReady').addEventListener('click', function () { setDrawMode('ready'); });
+
+    function initSlidingPill(container) {
+      var pill = container.querySelector('.toggle-pill');
+      var buttons = Array.prototype.slice.call(container.querySelectorAll('.nav-btn'));
+      if (!pill || !buttons.length) return;
+
+      function movePill(btn) {
+        pill.style.width = btn.offsetWidth + 'px';
+        pill.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+      }
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          buttons.forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+          movePill(btn);
+        });
+      });
+
+      var initial = container.querySelector('.nav-btn.is-active') || buttons[0];
+      requestAnimationFrame(function () { movePill(initial); });
+    }
+
+    document.querySelectorAll('.nav-pills').forEach(initSlidingPill);
+
+    function initWipToggle(screen) {
+      var navWrap = screen.querySelector('.nav-wrap');
+      var navPills = screen.querySelector('.nav-pills');
+      if (!navWrap || !navPills) return;
+      var contentEl = navWrap.previousElementSibling;
+      if (!contentEl) return;
+
+      var overlay = document.createElement('div');
+      overlay.className = 'wip-overlay';
+      overlay.innerHTML = '<p>製作中</p>';
+      contentEl.insertAdjacentElement('afterend', overlay);
+
+      var buttons = Array.prototype.slice.call(navPills.querySelectorAll('.nav-btn'));
+      buttons.forEach(function (btn, i) {
+        btn.addEventListener('click', function () {
+          var isWip = (i === 1 || i === 3);
+          contentEl.style.display = isWip ? 'none' : '';
+          overlay.classList.toggle('is-active', isWip);
+        });
+      });
+    }
+
+    document.querySelectorAll('.screen').forEach(initWipToggle);
 
     function updateBrushColor(mood) {
       var color = moodColors[mood] || '#2d2d2d';
